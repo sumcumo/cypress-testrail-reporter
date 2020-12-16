@@ -22,6 +22,11 @@ Example Configuration of the Mochawesome Reporter (`cypress.json`):
 
 This tool internally uses `@sum.cumo/Node-TestRail` (https://github.com/sumcumo/Node-TestRail) as Testrail API Client.
 
+## Installation
+```
+yarn add --dev @sum.cumo/cypress-testrail-reporter
+```
+
 ## Config
 The Testrail Reporter gets it's config from your `cypress.json` and / or provided cli arguments.
 
