@@ -2,7 +2,7 @@ import sleep from '../helper/sleep'
 import getTestCaseStatusId from '../helper/testCaseStatus'
 import {
   CypressReportError,
-  TestrailConnectorConfig,
+  TestrailReporterConfig,
   TestRailCypressResults,
   TestRailReference,
   TestRailRun,
@@ -23,7 +23,7 @@ export function getFormattedErrorMessages(testCase: TestRailReference): string |
 class TestRailReporter {
   private readonly branchName: string
 
-  private readonly config: TestrailConnectorConfig
+  private readonly config: TestrailReporterConfig
 
   private readonly cases: TestRailReference[]
 
@@ -33,7 +33,7 @@ class TestRailReporter {
 
   public refs: null | string
 
-  constructor(config: TestrailConnectorConfig, branchName: string, cases: TestRailReference[]) {
+  constructor(config: TestrailReporterConfig, branchName: string, cases: TestRailReference[]) {
     this.config = config
     this.branchName = branchName
     this.cases = cases

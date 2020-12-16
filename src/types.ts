@@ -1,9 +1,10 @@
-export type TestrailConnectorConfig = {
+export type TestrailReporterConfig = {
   projectId: string,
   branchReferenceRegex: string,
   host: string,
   user: string,
   password: string,
+  report: string,
 }
 
 export type TestRailReference = {
