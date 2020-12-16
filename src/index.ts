@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import readConfig from './helper/readConfig'
 import parseCypressResults from './parser'
 import TestRailReporter from './reporter'
@@ -20,7 +22,7 @@ yargs
     demandOption: true,
     describe: 'Cypress Result as json file - can also be defined within your cypress.json testrailReporter section',
     type: 'string',
-    default: config?.report,
+    default: config?.reportFilename,
   })
   .option('closeRun', {
     demandOption: false,
@@ -48,14 +50,14 @@ yargs
   })
   .help()
 
-const { name, report, closeRun } = yargs.argv
+const { name, reportFilename, closeRun } = yargs.argv
 
 print('yargs', yargs.argv)
 
-print('Start Test Rail Export', name, report, closeRun)
+print('Start Test Rail Export', name, reportFilename, closeRun)
 
 // // ParseCypressResults
-parseCypressResults(report)
+parseCypressResults(reportFilename)
   .then(async (parsedTestResults) => {
     print('Test results parsed')
     print('Passed:', parsedTestResults.analysis.passed)
