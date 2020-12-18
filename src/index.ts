@@ -18,7 +18,7 @@ yargs
     describe: 'Name of the Test Run',
     type: 'string',
   })
-  .option('report', {
+  .option('reportFilename', {
     demandOption: true,
     describe: 'Cypress Result as json file - can also be defined within your cypress.json testrailReporter section',
     type: 'string',

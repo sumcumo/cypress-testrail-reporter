@@ -1,5 +1,5 @@
 # cypress-testrail-reporter
-This little tool will help you parsing and posting your cypress test results to testrail.
+This little tool will help you to parse and post cypress test results to testrail.
 
 ## Preconditions
 This tools works with Mochawesome Json Reports. So please make sure you have the following packages installed: 
@@ -28,7 +28,7 @@ yarn add --dev @sum.cumo/cypress-testrail-reporter
 ```
 
 ## Config
-The Testrail Reporter gets it's config from your `cypress.json` and / or provided cli arguments.
+The Testrail Reporter gets its config from your `cypress.json` and / or provided cli arguments.
 
 ### Configuration via `cypress.json`
 Add a `testrailReporter` section to your Cypress Config. You can provide the following:
@@ -72,7 +72,7 @@ This will create a new or update an existing Testrun with the given name and wil
 Argument                    | Description
 ------                      | ------
 `name`                      | The Name of your Testrail Run
-`report`                    | The relative path to your report (from `process.cwd`).Example: `result.json`  Default: `reporterOptions.reportFilename`
+`reportFilename`            | The relative path to your report (from `process.cwd`).Example: `result.json`  Default: `reporterOptions.reportFilename`
 `closeRun`                  | Whether to close the run automatically or not. Default: `false`
 `host`                      | The Address of your running Testrail Application (API)
 `username`                  | A Username for Authentication against Testrail API
@@ -94,4 +94,4 @@ Integration Test:
    - yarn cypress-testrail-reporter --name $CI_COMMIT_REF_SLUG --user $TESTRAIL_USERNAME --password $TESTRAIL_PASSWORD
 ```
 
-The Example above will report result for the current branch and uses global variables for authentication. So you don't have to store credetnials within your project and can use Gitlab CI Variables instead.
+The Example above will report result for the current branch and uses global variables for authentication. So you don't have to store credentials within your project and can use Gitlab CI Variables instead.
