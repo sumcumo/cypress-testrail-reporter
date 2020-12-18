@@ -80,3 +80,7 @@ parseCypressResults(reportFilename)
       process.exit(1)
     }
   })
+  .catch((e) => {
+    print('Failed', e)
+    process.exit(1)
+  })
