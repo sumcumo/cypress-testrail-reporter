@@ -52,8 +52,6 @@ yargs
 
 const { name, reportFilename, closeRun } = yargs.argv
 
-print('yargs', yargs.argv)
-
 print('Start Test Rail Export', name, reportFilename, closeRun)
 
 // // ParseCypressResults
