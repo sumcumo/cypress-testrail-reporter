@@ -39,12 +39,7 @@ class TestRailReporter {
     this.cases = cases
     this.currentRun = null
 
-    const refs = this.branchName.match(this.getBranchReferenceRegex())
-    if (refs) {
-      this.refs = refs.map((ref) => ref.toUpperCase()).join(', ')
-    } else {
-      this.refs = null
-    }
+    this.setRefs()
 
     // Connect to API
     this.client = new TestRailConnector(
@@ -55,22 +50,29 @@ class TestRailReporter {
   }
 
   /**
-   * Should only post results if branch is development or refs were defined
+   * Should only post results if cases were provided
    * @returns {boolean}
    */
   shouldPostResults(): boolean {
-    const hasCases = this.cases && this.cases.length > 0
-
-    // Condition I: Cases and Branch is Development
-    if (this.branchName === 'development') {
-      return hasCases
-    }
-    // Condition II: Cases and References provided
-    return hasCases && this.refs !== null
+    return this.cases && this.cases.length > 0
   }
 
-  getBranchReferenceRegex(): RegExp {
-    return new RegExp(this.config.branchReferenceRegex, 'gi')
+  setRefs(): void {
+    this.refs = null
+    const regex = this.getBranchReferenceRegex()
+    if (regex !== null) {
+      const refs = this.branchName.match(regex as RegExp)
+      if (refs) {
+        this.refs = refs.map((ref) => ref.toUpperCase()).join(', ')
+      }
+    }
+  }
+
+  getBranchReferenceRegex(): RegExp | null {
+    if (this.config.branchReferenceRegex) {
+      return new RegExp(this.config.branchReferenceRegex, 'gi')
+    }
+    return null
   }
 
   getCoveredCases(): Array<string> {
