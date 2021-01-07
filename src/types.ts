@@ -1,3 +1,9 @@
+export type CypressReportError = {
+  message: string,
+  estack: string,
+  diff: string,
+}
+
 export type TestrailReporterConfig = {
   projectId: string,
   branchReferenceRegex: string,
@@ -47,44 +53,6 @@ export type CombinedResult = {
   testRailCases: Array<any>
 }
 
-export type CypressReportResult = {
-  uuid: string,
-  title: string,
-  fullFile: string,
-  file: string,
-  beforeHooks: Array<any>,
-  afterHooks: Array<any>,
-  tests: Array<any>,
-  suites: Array<CypressReportSuite>,
-  passes: Array<string>,
-  failures: Array<string>,
-  pending: Array<string>,
-  skipped: Array<string>,
-  duration: number,
-  root: boolean,
-  rootEmpty: boolean,
-  _timeout: number
-}
-
-export type CypressReportSuite = {
-    uuid: string,
-    title: string,
-    fullFile: string,
-    file: string,
-    beforeHooks: Array<any>,
-    afterHooks: Array<any>,
-    tests: Array<CypressReportSuiteTest>,
-    suites: Array<any>,
-    passes: Array<string>,
-    failures: Array<string>,
-    pending: Array<string>,
-    skipped: Array<string>,
-    duration: number,
-    root: boolean,
-    rootEmpty: boolean,
-    _timeout: number
-}
-
 export type CypressReportSuiteTest = {
   title: string,
   fullTitle: string,
@@ -104,8 +72,40 @@ export type CypressReportSuiteTest = {
   skipped: boolean,
 }
 
-export type CypressReportError = {
-  message: string,
-  estack: string,
-  diff: string,
+export type CypressReportSuite = {
+  uuid: string,
+  title: string,
+  fullFile: string,
+  file: string,
+  beforeHooks: Array<any>,
+  afterHooks: Array<any>,
+  tests: Array<CypressReportSuiteTest>,
+  suites: Array<any>,
+  passes: Array<string>,
+  failures: Array<string>,
+  pending: Array<string>,
+  skipped: Array<string>,
+  duration: number,
+  root: boolean,
+  rootEmpty: boolean,
+  _timeout: number
+}
+
+export type CypressReportResult = {
+  uuid: string,
+  title: string,
+  fullFile: string,
+  file: string,
+  beforeHooks: Array<any>,
+  afterHooks: Array<any>,
+  tests: Array<any>,
+  suites: Array<CypressReportSuite>,
+  passes: Array<string>,
+  failures: Array<string>,
+  pending: Array<string>,
+  skipped: Array<string>,
+  duration: number,
+  root: boolean,
+  rootEmpty: boolean,
+  _timeout: number
 }

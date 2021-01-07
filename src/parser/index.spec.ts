@@ -1,33 +1,48 @@
-import { getError, resultsWithCases, analyzeResults } from './index'
+import {
+  CypressReportSuiteTest,
+  CypressTestRailResult,
+  TestRailReference,
+} from '../types'
+import { getErrorForTest, resultsWithCases, analyzeResults } from './index'
 
 /**
- * getError
+ * getErrorForTest
  */
 test('should return false if no error was provided', () => {
-  expect(getError({})).toBeFalsy()
+  expect(getErrorForTest({} as CypressReportSuiteTest)).toBeFalsy()
 })
 
 test('should return false if no error message is present', () => {
-  expect(getError({ err: {} })).toBeFalsy()
+  expect(getErrorForTest({ err: {} } as CypressReportSuiteTest)).toBeFalsy()
 })
 
 test('should return error message', () => {
-  expect(getError({ err: { message: 'TEST' } })).toEqual({ message: 'TEST' })
+  expect(getErrorForTest({ err: { message: 'TEST' } } as CypressReportSuiteTest)).toEqual({ message: 'TEST' })
 })
 
 /**
  * resultsWithCases
  */
 test('should return false for no results', () => {
-  expect(resultsWithCases({})).toBeFalsy()
+  expect(resultsWithCases({} as CypressTestRailResult)).toBeFalsy()
 })
 
 test('should return false for no results with cases', () => {
-  expect(resultsWithCases({ ids: [1, 2, 3, 4] })).toBeFalsy()
+  expect(resultsWithCases({ cases: {}, file: '' } as CypressTestRailResult)).toBeFalsy()
 })
 
 test('should return true if results with cases were provided', () => {
-  expect(resultsWithCases({ cases: [1, 2, 3, 4] })).toBeTruthy()
+  const cases: CypressTestRailResult = {
+    file: '',
+    cases: {
+      32: {
+        caseId: '32',
+        pass: [true],
+        err: [],
+      } as TestRailReference,
+    },
+  }
+  expect(resultsWithCases(cases)).toBeTruthy()
 })
 
 /**
@@ -38,8 +53,9 @@ test('should handle empty result', () => {
     passed: 0,
     failed: 0,
   }
-  const result = {
+  const result: CypressTestRailResult = {
     cases: {},
+    file: '',
   }
   expect(analyzeResults(initial, result)).toEqual({
     passed: 0,
@@ -52,12 +68,15 @@ test('should detect single passed test', () => {
     passed: 0,
     failed: 0,
   }
-  const result = {
+  const result: CypressTestRailResult = {
     cases: {
       1: {
+        caseId: '1',
         pass: [true],
+        err: [],
       },
     },
+    file: '',
   }
   expect(analyzeResults(initial, result)).toEqual({
     passed: 1,
@@ -70,12 +89,15 @@ test('should detect multiple pass references for single test', () => {
     passed: 0,
     failed: 0,
   }
-  const result = {
+  const result: CypressTestRailResult = {
     cases: {
       1: {
+        caseId: '1',
         pass: [true, true, true],
+        err: [],
       },
     },
+    file: '',
   }
   expect(analyzeResults(initial, result)).toEqual({
     passed: 1,
