@@ -10,10 +10,27 @@ import {
   TestRailReference,
 } from '../types'
 
-const CASE_REGEX = /\[(\d*(,\s*\d+)*)]/
+const CASE_REGEX = /(^.*)\[(\d*(,\s*\d+)*)\]/
 
-export function getErrorForTest(test: CypressReportSuiteTest): CypressReportError | boolean {
-  return (test.err && test.err.message) ? test.err : false
+/**
+ * Get Formatted Error for Test. Pass optional title to prefix errors
+ * @param test
+ * @param testTitle
+ */
+export function getErrorForTest(
+  test: CypressReportSuiteTest,
+  testTitle: string | null = null,
+): CypressReportError | boolean {
+  if (!test.err || !test.err.message) return false
+  let { message } = test.err
+  if (testTitle) {
+    message = `${testTitle}: ${test.err.message}`
+  }
+
+  return {
+    ...test.err,
+    message,
+  }
 }
 
 export function reduceSuite(
@@ -22,7 +39,7 @@ export function reduceSuite(
 ): {[caseId: string]: TestRailReference} {
   if (CASE_REGEX.test(suite.title)) {
     const titleParts = CASE_REGEX.exec(suite.title)
-    const [, caseIds] = titleParts || ['', '']
+    const [title, caseIds] = titleParts || ['', '']
 
     caseIds.split(',').forEach((id) => {
       const caseId = id.trim()
@@ -36,7 +53,7 @@ export function reduceSuite(
         ],
         err: [
           ...(acc[caseId] ? acc[caseId].err : []),
-          ...suite.tests.map((t) => getErrorForTest(t)),
+          ...suite.tests.map((t) => getErrorForTest(t, title)),
         ].filter(Boolean),
       }
     })
@@ -44,7 +61,7 @@ export function reduceSuite(
     suite.tests.forEach((test) => {
       if (CASE_REGEX.test(test.title)) {
         const titleParts = CASE_REGEX.exec(test.title)
-        const [, caseIds] = titleParts || ['', '']
+        const [title, caseIds] = titleParts || ['', '']
 
         caseIds.split(',').forEach((id) => {
           const caseId = id.trim()
@@ -57,7 +74,7 @@ export function reduceSuite(
             ],
             err: [
               ...(acc[caseId] ? acc[caseId].err : []),
-              getErrorForTest(test),
+              getErrorForTest(test, title),
             ].filter(Boolean),
           }
         })
