@@ -39,7 +39,7 @@ export function reduceSuite(
 ): {[caseId: string]: TestRailReference} {
   if (CASE_REGEX.test(suite.title)) {
     const titleParts = CASE_REGEX.exec(suite.title)
-    const [title, caseIds] = titleParts || ['', '']
+    const [, title, caseIds] = titleParts || ['', '']
 
     caseIds.split(',').forEach((id) => {
       const caseId = id.trim()
@@ -61,7 +61,7 @@ export function reduceSuite(
     suite.tests.forEach((test) => {
       if (CASE_REGEX.test(test.title)) {
         const titleParts = CASE_REGEX.exec(test.title)
-        const [title, caseIds] = titleParts || ['', '']
+        const [, title, caseIds] = titleParts || ['', '']
 
         caseIds.split(',').forEach((id) => {
           const caseId = id.trim()
