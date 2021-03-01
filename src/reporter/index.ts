@@ -123,7 +123,15 @@ class TestRailReporter {
       // Update existing Testrun
       print(`Update Run ${this.branchName}`, run.id, caseIds)
       const updateRunResponse = this.client
-        .updateRun(run.id, this.branchName, description, null, false, caseIds, this.refs)
+        .updateRun(
+          run.id,
+          this.branchName,
+          description,
+          run.milestone_id,
+          false,
+          caseIds,
+          this.refs,
+        )
         .then((response) => response.data)
         .catch(this.onError)
       print('Run updated', updateRunResponse)

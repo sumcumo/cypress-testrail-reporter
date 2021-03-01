@@ -24,6 +24,8 @@ export type TestRailRun = {
   name: string,
   // eslint-disable-next-line camelcase
   is_completed: boolean,
+  // eslint-disable-next-line camelcase
+  milestone_id: number | null,
 }
 
 export type TestRailCypressResult = {
