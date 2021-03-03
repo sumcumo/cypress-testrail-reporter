@@ -1,5 +1,5 @@
 import sleep from '../helper/sleep'
-import getTestCaseStatusId from '../helper/testCaseStatus'
+import { getCombinedTestCaseStatusId } from '../helper/testCaseStatus'
 import {
   CypressReportError,
   TestrailReporterConfig,
@@ -83,7 +83,7 @@ class TestRailReporter {
     return {
       results: this.cases.map((testCase: TestRailReference) => ({
         case_id: testCase.caseId,
-        status_id: getTestCaseStatusId(testCase),
+        status_id: getCombinedTestCaseStatusId(testCase.results),
         comment: getFormattedErrorMessages(testCase),
       })),
     }

@@ -16,7 +16,7 @@ test('should return formatted single error message', () => {
       diff: '',
     }],
     caseId: '1',
-    pass: [false],
+    results: [5],
   }
 
   expect(getFormattedErrorMessages(testCase)).toEqual('**CypressError:** test')
@@ -34,7 +34,7 @@ test('should return formatted error messages', () => {
       diff: 'diff test2',
     }],
     caseId: '1',
-    pass: [false],
+    results: [5],
   }
 
   expect(getFormattedErrorMessages(testCase)).toEqual('**CypressError:** test\r\n**CypressError:** test2')

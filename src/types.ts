@@ -15,7 +15,7 @@ export type TestrailReporterConfig = {
 
 export type TestRailReference = {
   caseId: string,
-  pass: boolean[],
+  results: number[],
   err: Array<CypressReportError | boolean>
 }
 
@@ -47,12 +47,13 @@ export type CypressTestRailResult = {
 export type ReportAnalysis = {
   passed: number,
   failed: number,
+  skipped: number,
 }
 
 export type CombinedResult = {
   analysis: ReportAnalysis,
-  results: Array<any>,
-  testRailCases: Array<any>
+  results: Array<CypressTestRailResult>,
+  testRailCases: Array<TestRailReference>
 }
 
 export type CypressReportSuiteTest = {
@@ -61,13 +62,14 @@ export type CypressReportSuiteTest = {
   timedOut: any,
   duration: number,
   state: string, // "passed",
-  speed: string, // "slow",
+  speed: string | null, // "slow",
   pass: boolean,
   fail: boolean,
   pending: boolean,
   context: any,
   code: string,
-  err: CypressReportError,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  err: CypressReportError | {},
   uuid: string, // "5e093513-32a1-443d-a9c2-486b86e618e3",
   parentUUID: string, // "f3ad4a2d-1490-48fb-9171-daf4c5660404",
   isHook: boolean,

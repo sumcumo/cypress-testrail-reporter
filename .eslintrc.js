@@ -20,6 +20,10 @@ module.exports = {
       'always',
       { js: 'never', ts: 'never', mjs: 'never' },
     ],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
   },
   settings: {
     'import/resolver': {

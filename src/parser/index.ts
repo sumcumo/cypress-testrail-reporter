@@ -1,4 +1,5 @@
 import fs from 'fs'
+import getTestCaseStatusId from '../helper/testCaseStatus'
 import {
   CombinedResult,
   CypressReportError,
@@ -10,6 +11,9 @@ import {
   TestRailReference,
 } from '../types'
 
+/**
+ * REGEX To identify Case References in Test Titles like 'My Test [12345]'
+ */
 const CASE_REGEX = /(^.*)\[(\d*(,\s*\d+)*)\]/
 
 /**
@@ -21,19 +25,19 @@ export function getErrorForTest(
   test: CypressReportSuiteTest,
   testTitle: string | null = null,
 ): CypressReportError | boolean {
-  if (!test.err || !test.err.message) return false
-  let { message } = test.err
+  if (!test.err || !(test.err as CypressReportError).message) return false
+  let { message } = test.err as CypressReportError
   if (testTitle) {
-    message = `${testTitle}: ${test.err.message}`
+    message = `${testTitle}: ${message}`
   }
 
   return {
-    ...test.err,
+    ...test.err as CypressReportError,
     message,
   }
 }
 
-export function reduceSuite(
+export function parseSuite(
   acc: {[caseId: string]: TestRailReference},
   suite: CypressReportSuite,
 ): {[caseId: string]: TestRailReference} {
@@ -47,9 +51,9 @@ export function reduceSuite(
       acc[caseId] = {
         ...(acc[caseId] || {}),
         caseId,
-        pass: [
-          ...(acc[caseId] ? acc[caseId].pass : []),
-          suite.tests.every((t) => t.pass),
+        results: [
+          ...(acc[caseId] ? acc[caseId].results : []),
+          ...suite.tests.map((test) => getTestCaseStatusId(test)),
         ],
         err: [
           ...(acc[caseId] ? acc[caseId].err : []),
@@ -68,9 +72,9 @@ export function reduceSuite(
           acc[caseId] = {
             ...(acc[caseId] || {}),
             caseId,
-            pass: [
-              ...(acc[caseId] ? acc[caseId].pass : []),
-              test.pass,
+            results: [
+              ...(acc[caseId] ? acc[caseId].results : []),
+              getTestCaseStatusId(test),
             ],
             err: [
               ...(acc[caseId] ? acc[caseId].err : []),
@@ -85,7 +89,7 @@ export function reduceSuite(
   return acc
 }
 
-export function reduceResults(
+export function parseResults(
   acc: Array<CypressTestRailResult>,
   result: CypressReportResult,
 ): Array<CypressTestRailResult> {
@@ -93,7 +97,7 @@ export function reduceResults(
     file: result.file,
     cases: {},
   }
-  result.suites.reduce(reduceSuite, testResult.cases)
+  result.suites.reduce(parseSuite, testResult.cases)
 
   // Store
   acc.push(testResult)
@@ -110,11 +114,68 @@ export function analyzeResults(
   result: CypressTestRailResult,
 ): ReportAnalysis {
   acc.passed += Object.keys(result.cases)
-    .filter((id) => result.cases[id].pass.every((p) => p))
+    .filter(
+      (id) => result.cases[id].results.every((testRailStatusId: number) => testRailStatusId === 1),
+    )
     .length
   acc.failed += Object.keys(result.cases)
-    .filter((id) => result.cases[id].pass.some((p) => !p))
+    .filter(
+      (id) => result.cases[id].results.some((testRailStatusId: number) => testRailStatusId === 5),
+    )
     .length
+  acc.skipped += Object.keys(result.cases)
+    .filter(
+      (id) => result.cases[id].results.some((testRailStatusId: number) => testRailStatusId === 2),
+    )
+    .length
+
+  return acc
+}
+
+export function parseAndAnalyzeReports(acc: CombinedResult, report: string) {
+  const parsedTestResults = []
+  // Read Content from JSON
+  const content = fs.readFileSync(report.trim(), { encoding: 'utf-8' })
+  // Parse Content
+  const combinedReport = JSON.parse(content)
+
+  // Scan
+  combinedReport.results.reduce(parseResults, parsedTestResults)
+  acc.results = [
+    ...acc.results,
+    ...parsedTestResults,
+  ]
+
+  // Quickly analyze results
+  acc.analysis = parsedTestResults.reduce(analyzeResults, acc.analysis)
+
+  // Return combined Results
+  return acc
+}
+
+export function combineResults(acc: Array<TestRailReference>, result: CypressTestRailResult) {
+  Object.keys(result.cases).forEach((caseId) => {
+    const match = acc.findIndex((r) => r.caseId === caseId)
+
+    if (match < 0) {
+      // ADD New Result
+      acc.push(result.cases[caseId])
+    } else {
+      // Extend existing result
+      acc[match] = {
+        ...(acc[match] ? acc[match] : result.cases[caseId]),
+        results: [
+          ...acc[match].results,
+          ...result.cases[caseId].results,
+        ],
+        err: [
+          ...acc[match].err,
+          ...result.cases[caseId].err,
+        ],
+      }
+    }
+  })
+
   return acc
 }
 
@@ -122,67 +183,22 @@ export function parseCypressResults(cypressResults: string): Promise<CombinedRes
   return new Promise((resolve) => {
     const cypressReports = cypressResults.split(',')
 
-    const combined = cypressReports.reduce((acc, report) => {
-      const parsedTestResults = []
-      // Read Content from JSON
-      const content = fs.readFileSync(report.trim(), { encoding: 'utf-8' })
-      // Parse Content
-      const combinedReport = JSON.parse(content)
-
-      // Scan
-      combinedReport.results.reduce(reduceResults, parsedTestResults)
-
-      // Quickly analyze results
-      const analysis = parsedTestResults.reduce(analyzeResults, acc.analysis)
-
-      // Return combined Results
-      return {
-        ...acc,
-        analysis,
-        results: [
-          ...acc.results,
-          ...parsedTestResults,
-        ],
-      }
-    }, {
+    const combined: CombinedResult = {
       analysis: {
         passed: 0,
         failed: 0,
+        skipped: 0,
       },
       results: [],
       testRailCases: [],
-    } as CombinedResult)
+    }
+    cypressReports.reduce(parseAndAnalyzeReports, combined)
 
     // prepare cases
-    combined.testRailCases = combined.results
-      // Remove Tests without TestCraft references
+    combined.results
       .filter(resultsWithCases)
-      // Combine Cases
-      .reduce((acc, result) => {
-        Object.keys(result.cases).forEach((caseId) => {
-          const match = acc.findIndex((r) => r.caseId === caseId)
-
-          if (match < 0) {
-            // ADD New Result
-            acc.push(result.cases[caseId])
-          } else {
-            // Extend existing result
-            acc[match] = {
-              ...(acc[match] ? acc[match] : result.cases[caseId]),
-              pass: [
-                ...acc[match].pass,
-                ...result.cases[caseId].pass,
-              ],
-              err: [
-                ...acc[match].err,
-                ...result.cases[caseId].err,
-              ],
-            }
-          }
-        })
-
-        return acc
-      }, [])
+      .reduce(combineResults, combined.testRailCases)
+    // combined.testRailCases = extractTestrailCases(combined.results)
 
     return resolve(combined)
   })

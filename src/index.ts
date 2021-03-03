@@ -59,6 +59,7 @@ parseCypressResults(reportFilename)
   .then(async (parsedTestResults) => {
     print('Test results parsed')
     print('Passed:', parsedTestResults.analysis.passed)
+    print('Skipped:', parsedTestResults.analysis.skipped)
     print('Failed:', parsedTestResults.analysis.failed)
 
     print('parsedTestResults', JSON.stringify(parsedTestResults))
