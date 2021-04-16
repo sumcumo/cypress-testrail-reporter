@@ -24,7 +24,7 @@
     "release": "yarn build && npm publish --access public"
   },
   "dependencies": {
-    "@sum.cumo/node-testrail": "2.1.1",
+    "@sum.cumo/node-testrail": "2.2.0",
     "yargs": "^16.2.0"
   },
   "keywords": [

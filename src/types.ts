@@ -11,6 +11,8 @@ export type TestrailReporterConfig = {
   host: string,
   user: string,
   password: string,
+  screenshotsFolder: string,
+  videosFolder: string,
 }
 
 export type TestRailReference = {
