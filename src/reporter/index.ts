@@ -49,12 +49,16 @@ class TestRailReporter {
     )
   }
 
+  get hasCases() {
+    return this.cases && this.cases.length > 0
+  }
+
   /**
    * Should only post results if cases were provided
    * @returns {boolean}
    */
   shouldPostResults(): boolean {
-    return this.cases && this.cases.length > 0
+    return this.hasCases
   }
 
   setRefs(): void {
@@ -143,7 +147,7 @@ class TestRailReporter {
     return run
   }
 
-  async postResults(closeRun: boolean): Promise<boolean> {
+  private async addResultsForCases(closeRun: boolean): Promise<boolean> {
     if (this.shouldPostResults()) {
       // Fetch Runs from testrail
       try {
@@ -185,6 +189,29 @@ class TestRailReporter {
     }
 
     return false
+  }
+
+  private async addAttachmentsToTestRun(attachments: string[]) {
+    this.client.addAttachmentsToRun(this.currentRun?.id, attachments)
+  }
+
+  private async addAssetsToTestRun(assets: string[], assetsArchiveName: string) {
+    this.client.addAttachmentsToRun(this.currentRun?.id, assets, assetsArchiveName)
+  }
+
+  async postResults(
+    closeRun: boolean,
+    attachments: string[],
+    assets: string[],
+    assetsArchiveName: string,
+  ) {
+    await this.addResultsForCases(closeRun)
+
+    await this.addAttachmentsToTestRun(attachments)
+
+    if (assets.length > 0 && assetsArchiveName) {
+      await this.addAssetsToTestRun(assets, assetsArchiveName)
+    }
   }
 
   async closeTestrailRun(): Promise<void> {

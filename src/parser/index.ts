@@ -179,10 +179,8 @@ export function combineResults(acc: Array<TestRailReference>, result: CypressTes
   return acc
 }
 
-export function parseCypressResults(cypressResults: string): Promise<CombinedResult> {
+export function parseCypressResults(cypressReportFilenames: string): Promise<CombinedResult> {
   return new Promise((resolve) => {
-    const cypressReports = cypressResults.split(',')
-
     const combined: CombinedResult = {
       analysis: {
         passed: 0,
@@ -192,13 +190,18 @@ export function parseCypressResults(cypressResults: string): Promise<CombinedRes
       results: [],
       testRailCases: [],
     }
-    cypressReports.reduce(parseAndAnalyzeReports, combined)
 
-    // prepare cases
-    combined.results
-      .filter(resultsWithCases)
-      .reduce(combineResults, combined.testRailCases)
-    // combined.testRailCases = extractTestrailCases(combined.results)
+    if (cypressReportFilenames) {
+      const cypressReports = cypressReportFilenames.split(',')
+
+      cypressReports.reduce(parseAndAnalyzeReports, combined)
+
+      // prepare cases
+      combined.results
+        .filter(resultsWithCases)
+        .reduce(combineResults, combined.testRailCases)
+      // combined.testRailCases = extractTestrailCases(combined.results)
+    }
 
     return resolve(combined)
   })

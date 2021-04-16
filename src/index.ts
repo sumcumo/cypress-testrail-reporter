@@ -19,7 +19,7 @@ yargs
     type: 'string',
   })
   .option('reportFilename', {
-    demandOption: true,
+    demandOption: false,
     describe: 'Cypress Result as json file - can also be defined within your cypress.json testrailReporter section',
     type: 'string',
     default: config?.reportFilename,
@@ -48,11 +48,31 @@ yargs
     type: 'string',
     default: config?.password,
   })
+  .option('uploadAssests', {
+    demandOption: false,
+    describe: 'Should Cypress Videos / Screenshots be uploaded and attached to the current run?',
+    type: 'array',
+    default: [],
+  })
+  .option('assetsArchiveName', {
+    demandOption: false,
+    describe: 'Provide a name for your assets Archive. Default: cypressAssets',
+    type: 'string',
+    default: 'cypressAssets',
+  })
+  .option('attach', {
+    demandOption: false,
+    describe: 'Do you have files you want to attach to this run?',
+    type: 'array',
+    default: [],
+  })
   .help()
 
-const { name, reportFilename, closeRun } = yargs.argv
+const {
+  name, reportFilename, closeRun, attach,
+} = yargs.argv
 
-print('Start Test Rail Export', name, reportFilename, closeRun)
+print('Start Test Rail Export', name, reportFilename, closeRun, attach)
 
 // // ParseCypressResults
 parseCypressResults(reportFilename)
@@ -67,15 +87,22 @@ parseCypressResults(reportFilename)
     // post Results to testrail
     try {
       const reporter = new TestRailReporter(
-        config,
+        {
+          ...config,
+          user: yargs.argv.username,
+          password: yargs.argv.password,
+          host: yargs.argv.host,
+        },
         name,
         parsedTestResults.testRailCases,
       )
-      const postResult: boolean = await reporter.postResults(closeRun)
 
-      if (!postResult) {
-        throw new Error(`Posting failed for ${name}`)
-      }
+      await reporter.postResults(
+        closeRun,
+        yargs.argv.attach,
+        yargs.argv.uploadAssests,
+        yargs.argv.assetsArchiveName,
+      )
     } catch (e) {
       print('Posting Failed', e)
       process.exit(1)
