@@ -69,7 +69,7 @@ This will create a new or update an existing Testrun with the given name and wil
 
 ### Attachments
 ```
-yarn cypress-testrail-reporter --name NAME_OF_YOUR_TESTRUN --attach test/cypress/results/report.html --uploadAssests test/cypress/videos test/cypress/screenshots --assetsArchiveName CUSTOM_NAME_FOR_YOUR_ARCHIVE
+yarn cypress-testrail-reporter --name NAME_OF_YOUR_TESTRUN --attach test/cypress/results/report.html --assets test/cypress/videos test/cypress/screenshots --assetsArchiveName CUSTOM_NAME_FOR_YOUR_ARCHIVE
 ```
 This will create a new or update an existing Testrun with the given name and will report all results found in your Mochawesome Report.
 Afterwards it will attach a report.html to this run and create an archive containing all provided assets and attach it as well. 
@@ -84,7 +84,7 @@ Argument                    | Description
 `host`                      | The Address of your running Testrail Application (API)
 `username`                  | A Username for Authentication against Testrail API
 `password`                  | The corresponding password
-`uploadAssests`             | Provide Assets Paths if you want to attach them to a run
+`assets`                    | Provide Assets Paths if you want to attach them to a run
 `assetsArchiveName`         | Provide a custom archive Name. Default: cypressAssets
 `attach`                    | Provide further attachments like reports
 

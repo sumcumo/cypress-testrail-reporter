@@ -48,7 +48,7 @@ yargs
     type: 'string',
     default: config?.password,
   })
-  .option('uploadAssests', {
+  .option('assets', {
     demandOption: false,
     describe: 'Should Cypress Videos / Screenshots be uploaded and attached to the current run?',
     type: 'array',
@@ -72,7 +72,7 @@ const {
   name, reportFilename, closeRun, attach,
 } = yargs.argv
 
-print('Start Test Rail Export', name, reportFilename, closeRun, attach)
+print('Start Test Rail Export', name, reportFilename, closeRun, attach, yargs.argv.assets)
 
 // // ParseCypressResults
 parseCypressResults(reportFilename)
@@ -100,7 +100,7 @@ parseCypressResults(reportFilename)
       await reporter.postResults(
         closeRun,
         yargs.argv.attach,
-        yargs.argv.uploadAssests,
+        yargs.argv.assets,
         yargs.argv.assetsArchiveName,
       )
     } catch (e) {

@@ -161,9 +161,6 @@ class TestRailReporter {
 
   private async addResultsForCases(): Promise<boolean> {
     if (this.shouldPostResults()) {
-      // Fetch Runs from testrail
-      this.currentRun = await this.findOrCreateRun()
-
       // Do we have a valid run?
       if (this.currentRun && this.currentRun.id) {
         print('POST', this.cases, this.currentRun.id)
@@ -203,6 +200,9 @@ class TestRailReporter {
     assets: string[],
     assetsArchiveName: string,
   ) {
+    // Fetch Runs from testrail
+    this.currentRun = await this.findOrCreateRun()
+
     await this.addResultsForCases()
 
     await this.addAttachmentsToTestRun(attachments)

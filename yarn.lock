@@ -1489,10 +1489,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sum.cumo/node-testrail@2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@sum.cumo/node-testrail/-/node-testrail-2.2.2.tgz#961e674d68e2e9294e44e484023d3bf898ca2634"
-  integrity sha512-vr2L/pDvhorQ0ULDaMNHlJN+XQoRFLJq1fCK4noUT8yWdcvOQtISOiEqLg48mOqSF3NFgM4HMJr9/Aq3SP+vqA==
+"@sum.cumo/node-testrail@2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@sum.cumo/node-testrail/-/node-testrail-2.2.3.tgz#149086b9b571977be50dfb3a7182ecb652db38b8"
+  integrity sha512-lo8kEhDDC/rqjvUaommJu//zR6c5DTm5sLNcddS8w+N9Lq0DqJkg7YKOAUXIeCxSZzJITL2fZxdMSvSWQZ71jg==
   dependencies:
     adm-zip "^0.5.5"
     axios "^0.21.1"
