@@ -147,18 +147,22 @@ class TestRailReporter {
     return run
   }
 
-  private async addResultsForCases(closeRun: boolean): Promise<boolean> {
+  private async findOrCreateRun(): Promise<TestRailRun> {
+    try {
+      return this.client
+        .getRuns(this.config.projectId)
+        .then((response) => response.data)
+        .then(this.findOrCreateRunByName.bind(this))
+        .catch(this.onError)
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
+  private async addResultsForCases(): Promise<boolean> {
     if (this.shouldPostResults()) {
       // Fetch Runs from testrail
-      try {
-        this.currentRun = await this.client
-          .getRuns(this.config.projectId)
-          .then((response) => response.data)
-          .then(this.findOrCreateRunByName.bind(this))
-          .catch(this.onError)
-      } catch (e) {
-        throw new Error(e)
-      }
+      this.currentRun = await this.findOrCreateRun()
 
       // Do we have a valid run?
       if (this.currentRun && this.currentRun.id) {
@@ -174,12 +178,6 @@ class TestRailReporter {
             print('Post not successful', result)
             return false
           }
-
-          if (closeRun) {
-            print('Close RUN')
-            await this.closeTestrailRun()
-          }
-          return true
         } catch (e) {
           throw new Error(e)
         }
@@ -205,12 +203,17 @@ class TestRailReporter {
     assets: string[],
     assetsArchiveName: string,
   ) {
-    await this.addResultsForCases(closeRun)
+    await this.addResultsForCases()
 
     await this.addAttachmentsToTestRun(attachments)
 
     if (assets.length > 0 && assetsArchiveName) {
       await this.addAssetsToTestRun(assets, assetsArchiveName)
+    }
+
+    if (closeRun) {
+      print('Close RUN')
+      await this.closeTestrailRun()
     }
   }
 
