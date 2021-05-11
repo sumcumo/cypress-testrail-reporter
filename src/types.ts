@@ -6,6 +6,7 @@ export type CypressReportError = {
 
 export type TestrailReporterConfig = {
   projectId: string,
+  suiteId: string | null,
   branchReferenceRegex: string,
   reportFilename: string,
   host: string,

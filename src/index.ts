@@ -18,6 +18,12 @@ yargs
     describe: 'Name of the Test Run',
     type: 'string',
   })
+  .option('suiteId', {
+    demandOption: false,
+    describe: 'related Testrail Suite Id',
+    type: 'string',
+    default: config?.suiteId || null,
+  })
   .option('reportFilename', {
     demandOption: false,
     describe: 'Cypress Result as json file - can also be defined within your cypress.json testrailReporter section',
@@ -92,6 +98,7 @@ parseCypressResults(reportFilename)
           user: yargs.argv.username,
           password: yargs.argv.password,
           host: yargs.argv.host,
+          suiteId: yargs.argv.suiteId,
         },
         name,
         parsedTestResults.testRailCases,

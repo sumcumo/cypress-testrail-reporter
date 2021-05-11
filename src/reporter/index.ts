@@ -113,7 +113,7 @@ class TestRailReporter {
       run = this.client
         .addRun(
           this.config.projectId,
-          null,
+          this.config.suiteId,
           this.branchName,
           description,
           null,
