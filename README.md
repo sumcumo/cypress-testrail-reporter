@@ -36,6 +36,7 @@ Add a `testrailReporter` section to your Cypress Config. You can provide the fol
 Argument                    | Description
 ------                      | ------
 `projectId`                 | The ID of your Testrail Project
+`suiteId`                   | Testrails Suite Id
 `branchReferenceRegex`      | This Reporter will create JIRA References if this regex is matching your Branch name
 `host`                      | The Address of your running Testrail Application (API)
 `username`                  | A Username for Authentication against Testrail API
@@ -47,6 +48,7 @@ Example:
     ...
     "testrailReporter": {
         "projectId": "1",
+        "suiteId": "2",
         "branchReferenceRegex": "((feat|chore)-\\d*)",
         "host": "https://example.testrail.io/",
         "user": "some@one.com",
@@ -79,6 +81,7 @@ Afterwards it will attach a report.html to this run and create an archive contai
 Argument                    | Description
 ------                      | ------
 `name`                      | The Name of your Testrail Run
+`suiteId`                   | Testrails suite Id
 `reportFilename`            | The relative path to your report (from `process.cwd`).Example: `result.json`  Default: `reporterOptions.reportFilename`
 `closeRun`                  | Whether to close the run automatically or not. Default: `false`
 `host`                      | The Address of your running Testrail Application (API)
