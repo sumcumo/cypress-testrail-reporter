@@ -24,8 +24,8 @@
     "release": "yarn build && npm publish --access public"
   },
   "dependencies": {
-    "@sum.cumo/node-testrail": "2.2.4",
-    "yargs": "^16.2.0"
+    "@sum.cumo/node-testrail": "2.3.0",
+    "yargs": "^17.0.1"
   },
   "keywords": [
     "testrail",
@@ -36,30 +36,28 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@babel/core": "^7.13.15",
-    "@babel/plugin-proposal-object-rest-spread": "7.13.8",
-    "@babel/plugin-transform-runtime": "^7.13.15",
-    "@babel/preset-env": "7.13.15",
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-proposal-object-rest-spread": "7.14.2",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/preset-env": "7.14.2",
     "@babel/preset-typescript": "7.13.0",
-    "@commitlint/cli": "^12.1.1",
-    "@commitlint/config-conventional": "^12.1.1",
-    "@types/jest": "^26.0.22",
-    "@typescript-eslint/eslint-plugin": "^4.21.0",
-    "@typescript-eslint/parser": "^4.21.0",
-    "eslint": "^7.24.0",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.3.5",
-    "husky": "^4.3.0",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-jest": "^24.3.6",
     "jest": "^26.6.3",
-    "ts-jest": "^26.5.4",
+    "simple-git-hooks": "^2.4.1",
+    "ts-jest": "^26.5.6",
     "typescript": "4.2.4"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "yarn lint",
+    "commit-msg": "npx commitlint -e"
   }
 }
