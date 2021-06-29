@@ -27,6 +27,24 @@ This tool internally uses `@sum.cumo/Node-TestRail` (https://github.com/sumcumo/
 yarn add --dev @sum.cumo/cypress-testrail-reporter
 ```
 
+## Testrail Case Ids
+In order to link you cypress tests to testrail cases it's required to provide the actual Testrail CaseId(s) in your tests title.
+Example:
+```
+it('should do something [123]', () => {})
+```
+Or
+```
+describe('Feature Tests [123]', () => {
+
+  it('should do something', () => {})
+  
+})
+```
+
+The above examples will link the results of the test to a case C123 (C is the testrail Case Prefix. Case IDs are numerical)
+
+
 ## Config
 The Testrail Reporter gets its config from your `cypress.json` and / or provided cli arguments.
 
@@ -40,7 +58,8 @@ Argument                    | Description
 `branchReferenceRegex`      | This Reporter will create JIRA References if this regex is matching your Branch name
 `host`                      | The Address of your running Testrail Application (API)
 `username`                  | A Username for Authentication against Testrail API
-`password`                  | The corresponding password
+`password`                  | The corresponding password or API token
+`reportFilename`            | The relative path to your mochawesome report, eg ./test/cypress/results/result.json
 
 Example:
 ``` json
@@ -82,7 +101,7 @@ Argument                    | Description
 ------                      | ------
 `name`                      | The Name of your Testrail Run
 `suiteId`                   | Testrails suite Id
-`reportFilename`            | The relative path to your report (from `process.cwd`).Example: `result.json`  Default: `reporterOptions.reportFilename`
+`reportFilename`            | The relative path to your report (from `process.cwd`).Example: `result.json`  Default: `testrailReporter.reportFilename`
 `closeRun`                  | Whether to close the run automatically or not. Default: `false`
 `host`                      | The Address of your running Testrail Application (API)
 `username`                  | A Username for Authentication against Testrail API

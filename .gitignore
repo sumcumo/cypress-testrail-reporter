@@ -4,6 +4,7 @@
 dist
 test
 cypress.json
+cypress-report.json
 # Dependency directory
 # Deployed apps should consider commenting this line out:
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git

@@ -8,7 +8,7 @@ export default function readConfig(): TestrailReporterConfig | null {
 
     return {
       ...cypressConfig.testrailReporter,
-      reportFilename: cypressConfig.reporterOptions?.reportFilename,
+      reportFilename: cypressConfig.testrailReporter?.reportFilename,
     }
   } catch (e) {
     // eslint-disable-next-line no-console
