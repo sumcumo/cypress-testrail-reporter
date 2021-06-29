@@ -95,7 +95,7 @@ class TestRailReporter {
 
   // eslint-disable-next-line class-methods-use-this
   onError(e: any): void {
-    throw new Error(e.response.data.error || e)
+    throw new Error(e.response?.data?.error || e)
   }
 
   async findOrCreateRunByName(runs: TestRailRun[]): Promise<TestRailRun> {
