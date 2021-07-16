@@ -60,6 +60,7 @@ Argument                    | Description
 `username`                  | A Username for Authentication against Testrail API
 `password`                  | The corresponding password or API token
 `reportFilename`            | The relative path to your mochawesome report, eg ./test/cypress/results/result.json
+`includeAll` .              | Whether include all test cases to current test run, Default: `false`
 
 Example:
 ``` json
@@ -71,7 +72,8 @@ Example:
         "branchReferenceRegex": "((feat|chore)-\\d*)",
         "host": "https://example.testrail.io/",
         "user": "some@one.com",
-        "password": "YOUR_PASSWORD"
+        "password": "YOUR_PASSWORD",
+        "includeAll": true
     },
 ```
 

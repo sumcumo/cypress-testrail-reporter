@@ -117,7 +117,7 @@ class TestRailReporter {
           this.branchName,
           description,
           null,
-          false,
+          this.config.includeAll,
           caseIds,
           this.refs,
         )
@@ -132,7 +132,7 @@ class TestRailReporter {
           this.branchName,
           description,
           run.milestone_id,
-          false,
+          this.config.includeAll,
           caseIds,
           this.refs,
         )

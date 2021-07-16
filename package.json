@@ -1,7 +1,7 @@
 {
   "name": "@sum.cumo/cypress-testrail-reporter",
   "description": "Parse and Post your cypress results to testrail",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "bin": {
     "cypress-testrail-reporter": "dist/index.js"
   },
