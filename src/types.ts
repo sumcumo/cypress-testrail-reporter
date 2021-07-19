@@ -14,6 +14,7 @@ export type TestrailReporterConfig = {
   password: string,
   screenshotsFolder: string,
   videosFolder: string,
+  includeAll: boolean
 }
 
 export type TestRailReference = {

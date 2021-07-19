@@ -72,6 +72,12 @@ yargs
     type: 'array',
     default: [],
   })
+  .option('includeAll', {
+    demandOption: false,
+    describe: 'Whether include all test cases of the test suite',
+    type: 'boolean',
+    default: config.includeAll,
+  })
   .help()
 
 const {
@@ -79,6 +85,10 @@ const {
 } = yargs.argv
 
 print('Start Test Rail Export', name, reportFilename, closeRun, attach, yargs.argv.assets)
+
+const defaultConfig = {
+  includeAll: false,
+}
 
 // // ParseCypressResults
 parseCypressResults(reportFilename)
@@ -94,6 +104,7 @@ parseCypressResults(reportFilename)
     try {
       const reporter = new TestRailReporter(
         {
+          ...defaultConfig,
           ...config,
           user: yargs.argv.username,
           password: yargs.argv.password,
