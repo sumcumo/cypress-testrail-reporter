@@ -102,8 +102,10 @@ Afterwards it will attach a report.html to this run and create an archive contai
 Argument                    | Description
 ------                      | ------
 `name`                      | The Name of your Testrail Run
+`projectId`                 | The ID of your Testrail Project
 `suiteId`                   | Testrails suite Id
 `reportFilename`            | The relative path to your report (from `process.cwd`).Example: `result.json`  Default: `testrailReporter.reportFilename`
+`branchReferenceRegex`      | This Reporter will create JIRA References if this regex is matching your Branch name
 `closeRun`                  | Whether to close the run automatically or not. Default: `false`
 `host`                      | The Address of your running Testrail Application (API)
 `username`                  | A Username for Authentication against Testrail API

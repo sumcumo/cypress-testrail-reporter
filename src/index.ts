@@ -18,6 +18,12 @@ yargs
     describe: 'Name of the Test Run',
     type: 'string',
   })
+  .option('projectId', {
+    demandOption: false,
+    describe: 'related Testrail Project Id',
+    type: 'string',
+    default: config?.projectId,
+  })
   .option('suiteId', {
     demandOption: false,
     describe: 'related Testrail Suite Id',
@@ -29,6 +35,12 @@ yargs
     describe: 'Cypress Result as json file - can also be defined within your cypress.json testrailReporter section',
     type: 'string',
     default: config?.reportFilename,
+  })
+  .option('branchReferenceRegex', {
+    demandOption: false,
+    describe: 'This Reporter will create JIRA References if this regex is matching your Branch name',
+    type: 'string',
+    default: config?.branchReferenceRegex || null,
   })
   .option('closeRun', {
     demandOption: false,
@@ -110,6 +122,8 @@ parseCypressResults(reportFilename)
           password: yargs.argv.password,
           host: yargs.argv.host,
           suiteId: yargs.argv.suiteId,
+          projectId: yargs.argv.projectId,
+          branchReferenceRegex: yargs.argv.branchReferenceRegex,
         },
         name,
         parsedTestResults.testRailCases,
