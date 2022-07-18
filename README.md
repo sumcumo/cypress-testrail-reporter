@@ -1,6 +1,11 @@
 # cypress-testrail-reporter
 This little tool will help you to parse and post cypress test results to testrail.
 
+This repo is forked from [sumcumo/cypress-testrail-reporter
+](https://github.com/sumcumo/cypress-testrail-reporter) as a temp compatibility with cypress v10.
+
+Usage of this repo is exact the same as `sumcumo/cypress-testrail-reporter` except it read config from `testrailReporter.json` instead of `cypress.json` since cypress v10 use a js/ts config file.
+
 ## Preconditions
 This tools works with Mochawesome Json Reports. So please make sure you have the following packages installed: 
 ```
