@@ -5,11 +5,6 @@
   "bin": {
     "cypress-testrail-reporter": "dist/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sumcumo/cypress-testrail-reporter.git"
-  },
-  "author": "Marcel Jahn <marcel.jahn@sumcumo.com>",
   "main": "./dist/index.js",
   "types": "./dist/types.d.ts",
   "files": [
