@@ -6,6 +6,7 @@ import {
   TestRailCypressResults,
   TestRailReference,
   TestRailRun,
+  TestRailRunsResponse,
 } from '../types'
 
 import print from '../helper/printer'
@@ -98,8 +99,8 @@ class TestRailReporter {
     throw new Error(e.response?.data?.error || e)
   }
 
-  async findOrCreateRunByName(runs: TestRailRun[]): Promise<TestRailRun> {
-    let run = runs.find((r) => !r.is_completed && r.name === this.branchName)
+  async findOrCreateRunByName(response: TestRailRunsResponse): Promise<TestRailRun> {
+    let run = response.runs.find((r) => !r.is_completed && r.name === this.branchName)
 
     const caseIds = this.getCoveredCases()
     print('cids', caseIds)
@@ -121,7 +122,7 @@ class TestRailReporter {
           caseIds,
           this.refs,
         )
-        .then((response) => response.data)
+        .then((result) => result.data)
         .catch(this.onError) as TestRailRun
     } else {
       // Update existing Testrun
@@ -136,7 +137,7 @@ class TestRailReporter {
           caseIds,
           this.refs,
         )
-        .then((response) => response.data)
+        .then((result) => result.data)
         .catch(this.onError)
       print('Run updated', updateRunResponse)
     }
