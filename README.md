@@ -29,7 +29,7 @@ This tool internally uses `@sum.cumo/Node-TestRail` (https://github.com/sumcumo/
 
 ## Installation
 ```
-yarn add --dev @sum.cumo/cypress-testrail-reporter
+yarn add --dev @arabyzy/cypress-testrail-reporter
 ```
 
 ## Testrail Case Ids
@@ -51,9 +51,9 @@ The above examples will link the results of the test to a case C123 (C is the te
 
 
 ## Config
-The Testrail Reporter gets its config from your `cypress.json` and / or provided cli arguments.
+The Testrail Reporter gets its config from your `testrailReporter.json` and / or provided cli arguments.
 
-### Configuration via `cypress.json`
+### Configuration via `testrailReporter.json`
 Add a `testrailReporter` section to your Cypress Config. You can provide the following:
 
 Argument                    | Description
